@@ -1,5 +1,4 @@
 FROM docker.io/library/golang:alpine as builder
-# RUN mkdir -p /app
 WORKDIR /app
 
 COPY . .
@@ -10,8 +9,8 @@ RUN go mod download &&\
 # FROM docker.io/library/golang
 FROM docker.io/library/alpine
 WORKDIR /app
-COPY --from=builder /app .
+COPY --from=builder /app/app .
 
-EXPOSE 9090
+EXPOSE 8443
 
 ENTRYPOINT ["./app"]

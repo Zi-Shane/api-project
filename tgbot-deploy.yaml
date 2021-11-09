@@ -1,0 +1,42 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: test-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: test-server
+  template:
+    metadata:
+      labels:
+        app: test-server
+    spec:
+      nodeSelector:
+        "beta.kubernetes.io/os": linux
+      containers:
+      - name: test-server
+        image: tgbotreg.azurecr.io/api-example:v1.0
+        env:
+        - name: DOMAINNAME
+          valueFrom:
+            configMapKeyRef:
+              name: myconfigyaml
+              key: domainname
+        - name: TELEGRAM_APITOKEN
+          valueFrom:
+            configMapKeyRef:
+              name: myconfigyaml
+              key: bottoken
+        volumeMounts:
+        - name: certificate-volume
+          mountPath: /app/secret/azure.shanesnotes.tw
+          readOnly: true
+        ports:
+        - containerPort: 8443
+      volumes:
+      - name: certificate-volume
+        secret:
+          secretName: my-tls-secret
+

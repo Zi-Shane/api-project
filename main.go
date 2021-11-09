@@ -5,6 +5,7 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"os"
 	"strings"
 )
 
@@ -38,8 +39,12 @@ func login(w http.ResponseWriter, r *http.Request) {
 func main() {
 	http.HandleFunc("/", sayhelloName) //設定存取的路由
 	http.HandleFunc("/login", login)   //設定存取的路由
-	// err := http.ListenAndServeTLS(":9090", "./secret/server.crt", "./secret/server.key", nil) //設定監聽的埠
-	err := http.ListenAndServe(":9090", nil) //設定監聽的埠
+	fmt.Println(os.Getenv("TELEGRAM_APITOKEN"))
+	domainName := os.Getenv("DOMAINNAME")
+	certPath := "./secret/" + domainName + "/tls.crt"
+	keyPath := "./secret/" + domainName + "/tls.key"
+	err := http.ListenAndServeTLS(":8443", certPath, keyPath, nil) //設定監聽的埠
+	// err := http.ListenAndServe(":9090", nil) //設定監聽的埠
 	if err != nil {
 		log.Fatal("ListenAndServe: ", err)
 	}
