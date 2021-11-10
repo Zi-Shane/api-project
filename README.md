@@ -8,9 +8,9 @@
 openssl genrsa -out tls.key 2048
 
 # .csr for domain
-openssl req -nodes -new -key server.key -subj "/CN=<your.domain.com>/" -out tls.csr
+openssl req -nodes -new -key tls.key -subj "/CN=<your.domain.com>/" -out tls.csr
 
-openssl x509 -req -sha256 -days 3650 -in server.csr -signkey tls.key -out tls.crt
+openssl x509 -req -sha256 -days 3650 -in tls.csr -signkey tls.key -out tls.crt
 ```
 
 put `tls.crt` and `tls.key` into the folder `./secret/<DOMAINNAME>` 
