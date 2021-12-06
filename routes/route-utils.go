@@ -1,9 +1,8 @@
 package routes
 
 import (
+	"fmt"
 	"net/http"
-
-	controllers "api/controllers"
 
 	"github.com/gorilla/mux"
 )
@@ -17,13 +16,9 @@ type Route struct {
 
 var routes []Route
 
-func init() {
-	register("POST", "/api/todo", controllers.AddTodo, nil)
-	register("GET", "/api/todo/{id}", controllers.GetTodoById, nil)
-}
-
 func register(method, pattern string, handler http.HandlerFunc, middleware mux.MiddlewareFunc) {
 	routes = append(routes, Route{method, pattern, handler, middleware})
+	fmt.Println("Route: ", pattern)
 }
 
 func NewRouter() *mux.Router {

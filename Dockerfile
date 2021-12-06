@@ -11,6 +11,6 @@ FROM docker.io/library/alpine
 WORKDIR /app
 COPY --from=builder /app/app .
 
-EXPOSE 8443
+EXPOSE 3000
 
 ENTRYPOINT ["./app"]

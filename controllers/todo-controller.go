@@ -8,7 +8,7 @@ import (
 	"net/http"
 	"strconv"
 
-	services "api/services"
+	"api/services"
 
 	"github.com/gorilla/mux"
 )
@@ -18,11 +18,6 @@ var TodoList []Todo
 type Todo struct {
 	Id   int64
 	Item string
-}
-
-type ApiResponse struct {
-	ResultCode    string
-	ResultMessage interface{}
 }
 
 func AddTodo(w http.ResponseWriter, r *http.Request) {
