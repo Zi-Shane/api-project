@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-backend-deploy
+  namespace: api-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: api-backend
+  template:
+    metadata:
+      labels:
+        app: api-backend
+    spec:
+      containers:
+      - env:
+        - name: DB_CONN
+          valueFrom:
+            secretKeyRef:
+              key: dbconn
+              name: mariadb-conn
+        image: tgbotreg.azurecr.io/api-backend
+        name: api-backend
+        ports:
+        - containerPort: 3000
+          name: api-port
+      nodeSelector:
+        beta.kubernetes.io/os: linux
