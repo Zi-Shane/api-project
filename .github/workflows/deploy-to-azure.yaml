@@ -47,7 +47,10 @@ jobs:
     #     secret-name: ${{ env.SECRET }}
     #     namespace: ${{ env.NAMESPACE }}
     #     force: true
-    
+
+    - run: |
+        sed -i.bak "/API_BACKEND_IMAGE_URL/${{ env.REGISTRY_NAME }}.azurecr.io\/${{ env.APP_NAME }}:${{ github.sha }}" manifest/deployment.yml
+
     # Deploy app to AKS
     - uses: azure/k8s-deploy@v1
       with:

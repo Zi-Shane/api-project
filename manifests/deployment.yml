@@ -20,7 +20,8 @@ spec:
             secretKeyRef:
               key: dbconn
               name: mariadb-conn
-        image: tgbotreg.azurecr.io/api-backend:latest
+        # image: tgbotreg.azurecr.io/api-backend:latest
+        image: API_BACKEND_IMAGE_URL
         name: api-backend
         ports:
         - containerPort: 3000
