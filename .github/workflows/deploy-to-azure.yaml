@@ -5,7 +5,7 @@ env:
   REGISTRY_NAME: tgbotReg
   CLUSTER_NAME: tgbot
   CLUSTER_RESOURCE_GROUP: Telegram-Bot
-  NAMESPACE: backend-api
+  NAMESPACE: api-backend
   # SECRET: {secret-name}
   APP_NAME: api-backend
   
