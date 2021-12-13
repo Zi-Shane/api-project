@@ -1,24 +1,9 @@
 # api-porject
 
-## preparation
-
-1. Generate the Self-Signed certificate and private key for your domain name.
-
-```sh
-openssl genrsa -out tls.key 2048
-
-# .csr for domain
-openssl req -nodes -new -key tls.key -subj "/CN=<your.domain.com>/" -out tls.csr
-
-openssl x509 -req -sha256 -days 3650 -in tls.csr -signkey tls.key -out tls.crt
-```
-
-put `tls.crt` and `tls.key` into the folder `./secret/<DOMAINNAME>` 
-
-2. Environment variables
+## preparation - Environment variables
 
 ```
-DOMAINNAME=<your.domain.com>
+DB_CONN=username:password@tcp(127.0.0.1:3306)/nation
 ```
 
 ---
@@ -27,7 +12,7 @@ DOMAINNAME=<your.domain.com>
 
 You can store environment variables in `.env` file, and load them when running the program in vscode.
 
-```
+```json
 {
     "configurations": [
         {
