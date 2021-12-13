@@ -8,13 +8,15 @@ import (
 	"github.com/gorilla/mux"
 )
 
+// HandlerFunc of `GET /api/language/{id}`
 func GetLanguage(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	queryId := vars["id"] //獲取url參數
+	vars := mux.Vars(r)   // 獲取url參數
+	queryId := vars["id"] // 獲取{id}
 
-	// intQueryId, _ := strconv.Atoi(queryId)
+	// Call function from `services` to get data
 	var languages []database.Languages = services.ReadLanguage(queryId)
 
+	// Response data to Client
 	response := ApiResponse{"200", languages}
-	services.ResponseWithJson(w, http.StatusOK, response)
+	ResponseWithJson(w, http.StatusOK, response)
 }

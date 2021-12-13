@@ -8,8 +8,6 @@ import (
 	"net/http"
 	"strconv"
 
-	"api/services"
-
 	"github.com/gorilla/mux"
 )
 
@@ -31,7 +29,7 @@ func AddTodo(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 	response := ApiResponse{"200", TodoList}
 
-	services.ResponseWithJson(w, http.StatusOK, response) //回傳
+	ResponseWithJson(w, http.StatusOK, response) //回傳
 
 }
 
@@ -46,6 +44,6 @@ func GetTodoById(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	response := ApiResponse{"200", targetTodo}
-	services.ResponseWithJson(w, http.StatusOK, response)
+	ResponseWithJson(w, http.StatusOK, response)
 
 }

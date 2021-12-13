@@ -21,6 +21,7 @@ func register(method, pattern string, handler http.HandlerFunc, middleware mux.M
 	fmt.Println("Route: ", pattern)
 }
 
+// Bind HandlerFunc to Routes
 func NewRouter() *mux.Router {
 	r := mux.NewRouter()
 	for _, route := range routes {

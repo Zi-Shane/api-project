@@ -6,6 +6,6 @@ import (
 )
 
 func main() {
-	router := routes.NewRouter()
-	http.ListenAndServe(":3000", router)
+	router := routes.NewRouter()         // create a mux Router
+	http.ListenAndServe(":3000", router) // start server
 }
