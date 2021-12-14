@@ -3,6 +3,7 @@ package controllers
 import (
 	"api/database"
 	"api/services"
+	"os"
 
 	"github.com/gin-gonic/gin"
 )
@@ -17,5 +18,12 @@ func GetLanguage(c *gin.Context) {
 	// Response data to Client
 	c.JSON(200, gin.H{
 		"result": languages,
+	})
+}
+
+func GetHostname(c *gin.Context) {
+	hostname, _ := os.Hostname()
+	c.JSON(200, gin.H{
+		"hostname": hostname,
 	})
 }
