@@ -1,5 +1,6 @@
 on: 
-  create:
+  release:
+    types: [published, edited]
     branches:
       - main
 
