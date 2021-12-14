@@ -2,7 +2,6 @@ package database
 
 import (
 	"os"
-	"time"
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -34,7 +33,7 @@ func init() {
 	sqlDB.SetMaxOpenConns(100)
 
 	// SetConnMaxLifetime sets the maximum amount of time a connection may be reused.
-	sqlDB.SetConnMaxLifetime(time.Hour)
+	// sqlDB.SetConnMaxLifetime(time.Hour)
 
 	DB.AutoMigrate(&Languages{})
 }
