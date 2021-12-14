@@ -6,5 +6,5 @@ import (
 
 // Configure of API Route
 func init() {
-	register("GET", "/api/language/{id}", controllers.GetLanguage, nil)
+	register("GET", "/api/language/:id", controllers.GetLanguage)
 }

@@ -1,11 +1,11 @@
 package main
 
 import (
-	routes "api/routes"
-	"net/http"
+	"api/routes"
 )
 
 func main() {
-	router := routes.NewRouter()         // create a mux Router
-	http.ListenAndServe(":3000", router) // start server
+	router := routes.NewRouter()
+	// router.TrustedPlatform = gin.PlatformCloudflare
+	router.Run(":3000") // listen and serve on 0.0.0.0:8080
 }
