@@ -29,6 +29,14 @@ You can store environment variables in `.env` file, and load them when running t
 
 ---
 
+## Architecture diagram
+
+This Repository is the implementation of the backend in the diagram.
+
+![](https://i.imgur.com/lNeXLJZ.png)
+
+---
+
 ## API Document
 
 ### All Path
