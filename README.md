@@ -1,6 +1,12 @@
 # api-porject
 
-## preparation - Environment variables
+## How to Run?
+
+### MariaDB
+
+I use `docker-compose` to quickly start database when developing.
+
+### Environment variables
 
 ```
 DB_CONN=username:password@tcp(127.0.0.1:3306)/nation
