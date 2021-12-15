@@ -20,7 +20,7 @@ You can store environment variables in `.env` file, and load them when running t
             "type": "go",
             "request": "launch",
             "mode": "auto",
-            "program": "${fileDirname}",
+            "program": "${workspaceFolder}/main.go"
             "envFile": "${workspaceFolder}/secret/homepc.shanesnotes.tw/.env"
         }
     ]
@@ -29,102 +29,170 @@ You can store environment variables in `.env` file, and load them when running t
 
 ---
 
+## API Document
+
+### All Path
+```
+GET    /api/language/:id              --> api/controllers.GetLanguage 
+GET    /api/languageRange/:start/:end --> api/controllers.GetLanguages 
+GET    /api/countryUselanguage        --> api/controllers.GetCountryUesdLanguages 
+POST   /api/language                  --> api/controllers.AddLanguage 
+DELETE /api/language/:language        --> api/controllers.RemoveLanguage 
+PUT    /api/language                  --> api/controllers.UpdateLanguage
+```
+
+
+### `GET    /api/hostname`
+- query: `api/hostname`
+- response: 
+```json
+{
+  "hostname": "shane-ubuntu"
+}
+```
+
+### `GET    /api/GetLanguage/:id`
+- query: `api/GetLanguage/1`
+- response: 
+```json
+{
+  "message": "success",
+  "result": {
+    "Language_id": 1,
+    "Language": "Dutch"
+  }
+}
+```
+
+### `GET    /api/GetLanguageRange/:start/:end`
+- query: `api/GetLanguageRange/10/20`
+- response: 
+```json
+{
+  "message": "success",
+  "result": [
+    {
+      "Language_id": 10,
+      "Language": "Ambo"
+    },
+    {
+      "Language_id": 11,
+      "Language": "Chokwe"
+    },
+    {
+      "Language_id": 12,
+      "Language": "Kongo"
+    },
+    {
+      "Language_id": 13,
+      "Language": "Luchazi"
+    }
+  ]
+}
+```
+### `GET    /api/GetCountryUselanguage`
+- query: `api/GetCountryUselanguage/?country=Canada`
+- response: 
+```json
+{
+  "message": "success",
+  "result": [
+    {
+      "CountryName": "Canada",
+      "Language": "Dutch"
+    },
+    {
+      "CountryName": "Canada",
+      "Language": "English"
+    },
+    ...
+    {
+      "CountryName": "Canada",
+      "Language": "Chinese"
+    },
+    {
+      "CountryName": "Canada",
+      "Language": "Eskimo Languages"
+    },
+    {
+      "CountryName": "Canada",
+      "Language": "Punjabi"
+    }
+  ]
+}
+``` 
+
+### `POST   /api/AddLanguage`
+- query: `api/AddLanguage`
+    - body: 
+    ```json
+    [
+        {
+            "Language_id": 500,
+            "Language": "Test500"
+        },
+        {
+            "Language_id": 501,
+            "Language": "Test501"
+        }
+    ]
+    ```
+- response: 
+```json
+{
+  "message": "success",
+  "rowsAffected": 2
+}
+```
+
+### `/api/RemoveLanguage/:language`
+
+- query: `api/RemoveLanguage/Test501`
+- response: 
+```json
+{
+  "message": "success",
+  "rowsAffected": 1
+}
+```
+
+### `/api/UpdateLanguage`
+- query: `api/UpdateLanguage`
+    - body:
+    ```json
+    {
+        "Language_id": 500,
+        "Language": "Updated500"
+    }
+    ```
+- response: 
+```json
+{
+  "message": "success",
+  "rowsAffected": 1
+}
+```
+
+---
+
 ## Deploy to k8s
 
-To deploy this application to k8s, you have to prepare resources before you deploy to k8s.
+To deploy this application to k8s, you have to prepare Secret before you deploy to k8s.
+
+Then you can deploy `manifests/deployment.yml` and `manifests/service.yml`
 
 ### Secret
-```
-kubectl create secret tls my-tls-secret \
---key ./tls.key \
---cert ./tls.crt
-
-kubectl describe secrets/my-tls-secret
-```
-
-### ConfigMap
 ```yaml
 apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: myconfigyaml
 data:
-  domainname: <your.domain.com>
-  bottoken: xxxxx:aaaaaaaaaaaaaaaaaaaa
-```
-
-### Service
-- LoadBalancer
-```yaml
-apiVersion: v1
-kind: Service
+  dbconn: base64-encoded-connection-info
+kind: Secret
 metadata:
-  name: test-server-service
-spec:
-  type: LoadBalancer
-  ports:
-  - port: 8443
-  selector:
-    app: test-server
-```
-- NodePort
-```yaml
-apiVersion: v1
-kind: Service
-metadata:
-  name: test-server-service
-spec:
-  type: NodePort
-  selector:
-    app: test-server
-  ports:
-    - protocol: TCP
-      port: 8443
+  name: mariadb-conn
+  namespace: api-backend
+type: Opaque
 ```
 
-After you apply all resources, you can correctly deploy your application to k8s.
-
-### Deployment
-
-```yaml
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: test-server
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: test-server
-  template:
-    metadata:
-      labels:
-        app: test-server
-    spec:
-      nodeSelector:
-        "beta.kubernetes.io/os": linux
-      containers:
-      - name: test-server
-        image: tgbotreg.azurecr.io/api-example:v1.0
-        env:
-        - name: DOMAINNAME
-          valueFrom:
-            configMapKeyRef:
-              name: myconfigyaml
-              key: domainname
-        - name: TELEGRAM_APITOKEN
-          valueFrom:
-            configMapKeyRef:
-              name: myconfigyaml
-              key: bottoken
-        volumeMounts:
-        - name: certificate-volume
-          mountPath: /app/secret/<your.domain.com>
-          readOnly: true
-        ports:
-        - containerPort: 8443
-      volumes:
-      - name: certificate-volume
-        secret:
-          secretName: my-tls-secret
-```
+### How to generate secret?
+- Use `kustomization`: 
+    - [Official Tutorial](https://kubernetes.io/docs/tasks/manage-kubernetes-objects/kustomization/)
