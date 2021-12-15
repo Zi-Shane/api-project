@@ -1,6 +1,8 @@
 package services
 
-import "api/database"
+import (
+	"api/database"
+)
 
 func ReadLanguage(id string) (database.Languages, error) {
 	var languages database.Languages
@@ -16,6 +18,13 @@ func ReadLanguages(startId string, endId string) ([]database.Languages, error) {
 	result := database.DB.Where("Language_id BETWEEN ? AND ?", startId, endId).Find(&languages)
 
 	return languages, result.Error
+}
+
+func GetCountryUsedLanguages(country string) ([]database.CountryUesdLanguage, error) {
+	var r []database.CountryUesdLanguage
+	result := database.DB.Table("countries AS C").Select("C.name AS CountryName, L.language AS Language").Joins("JOIN country_languages AS CL ON CL.country_id = C.country_id").Joins("JOIN languages AS L ON CL.language_id = L.language_id").Where("C.name = ?", country).Scan(&r)
+
+	return r, result.Error
 }
 
 func InsertLanguage(items []database.Languages) (int64, error) {

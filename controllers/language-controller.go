@@ -33,6 +33,18 @@ func GetLanguages(c *gin.Context) {
 	}
 }
 
+func GetCountryUesdLanguages(c *gin.Context) {
+	country := c.Query("country")
+	var result []database.CountryUesdLanguage
+	result, err := services.GetCountryUsedLanguages(country)
+	if err != nil {
+		c.JSON(200, gin.H{"message": err.Error()})
+	} else {
+		// Response data to Client
+		c.JSON(200, gin.H{"message": "success", "result": result})
+	}
+}
+
 func AddLanguage(c *gin.Context) {
 	var m []database.Languages
 	c.Bind(&m)

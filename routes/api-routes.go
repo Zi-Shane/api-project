@@ -17,6 +17,7 @@ func setupHostInfoRoute() {
 func setupLanguageRoute() {
 	register("GET", "/api/language/:id", controllers.GetLanguage)
 	register("GET", "/api/languageRange/:start/:end", controllers.GetLanguages)
+	register("GET", "/api/countryUselanguage", controllers.GetCountryUesdLanguages)
 	register("POST", "/api/language", controllers.AddLanguage)
 	register("DELETE", "/api/language/:language", controllers.RemoveLanguage)
 	register("PUT", "/api/language", controllers.UpdateLanguage)

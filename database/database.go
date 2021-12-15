@@ -7,11 +7,6 @@ import (
 	"gorm.io/gorm"
 )
 
-type Languages struct {
-	Language_id int
-	Language    string
-}
-
 var DB *gorm.DB
 
 func init() {
